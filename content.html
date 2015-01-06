@@ -1,0 +1,33 @@
+
+<h2> Random entry: </h2>
+
+<?php
+
+// Get a random word from the database.
+
+$query = 'select word from entries order by random() limit 1';
+$statement = $db->prepare($query);
+$statement->execute();
+$word = $statement->fetch(PDO::FETCH_ASSOC)['word'];
+
+// Look up the definition of that word.
+
+$query = 'select definition from entries where word = ?';
+$statement = $db->prepare($query);
+$statement->execute(array($word));
+$definition = $statement->fetch(PDO::FETCH_ASSOC)['definition'];
+include "{$root}/definition.html";
+?>
+
+
+<h2> About this dictionary </h2>
+
+<p> <i>The Devil's Dictionary</i> is the work of the American writer <a
+href="http://en.wikipedia.org/wiki/Ambrose_Bierce">Ambrose Bierce</a>,
+who also wrote the short story "An Occurrence at Owl Creek Bridge". Bierce
+began to write satirical dictionary definitions in 1875 and published
+them sporadically in his newspaper columns in the ensuing decades. The
+first bound volume of his dictionary appeared in 1906. While some of
+Bierce's allusions may be outmoded, his observations of human frailty
+remain sharp and true. </p>
+

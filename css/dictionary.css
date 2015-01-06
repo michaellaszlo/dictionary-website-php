@@ -1,0 +1,89 @@
+html, body, div, p, ul, h1, h2, h3, h4 {
+  margin: 0;
+  padding: 0;
+  font-family: 'Bitter', 'Times', serif;
+}
+
+h1 {
+  color: #444;
+  margin-bottom: 10px;
+}
+h2 {
+  color: #444;
+  margin: 20px 0 10px;
+}
+
+a {
+  text-decoration: none;
+}
+p a {
+  color: #793e3e;
+}
+p a:hover {
+  color: #5a2929;
+  background: #eee;
+}
+h1 a {
+  color: #444;
+}
+h1 a:hover {
+  color: #000;
+}
+
+#wrapper {
+  margin: 20px 40px;
+}
+
+.listing {
+  font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
+  font-size: 18px;
+  margin-left: -7px;
+  line-height: 28px;
+}
+.listing.large {
+  font-size: 48px;
+  line-height: 66px;
+  margin-left: -15px;
+}
+.listing li {
+  display: inline;
+  margin: 0;
+}
+.listing a {
+  text-decoration: none;
+  color: #4880b5;
+  font-weight: normal;
+  padding: 2px 7px 3px;
+}
+.listing.large a {
+  color: #609dd5;
+  font-weight: normal;
+  padding: 0 15px 5px;
+}
+.listing.large li.long a {
+  font-size: 40px;
+  padding: 0 13px 3px;
+}
+.listing a:hover {
+  background: #609dd5;
+  color: #fff;
+}
+
+p {
+  margin-bottom: 5px;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.definition {
+  font-family: 'Bitter', 'Times', serif;
+}
+.definition p.heading {
+  margin-top: 5px;
+  font-weight: bold;
+  font-size: 17px;
+}
+.definition p.verse {
+  padding-left: 20px;
+  line-height: 24px;
+}
