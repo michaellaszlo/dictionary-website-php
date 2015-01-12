@@ -1,6 +1,59 @@
 <?php
   $root = $_SERVER['DOCUMENT_ROOT'];
+
+  $request = $_SERVER['REQUEST_URI'];
+  $original_request = $request;
+  // If there is no trailing slash, add one.
+  if (substr($request, -1) != '/') {
+    $request .= '/';
+  }
+  // Replace repeated slashes with single slashes.
+  $request = preg_replace('/\/+/', '/', $request);
+  // There should now be exactly three slashes.
+  if (substr_count($request, '/') != 3) {
+    include "{$root}/missing.html";
+  }
+  // Extract the requested dictionary headword.
+  $parts = explode('/', $request);
+  // The request '/entry/abacus/' yields ['', 'entry', 'abacus', ''].
+  $word = $parts[2];
+  // Apply URL decoding.
+  $word = urldecode($word);
+  // Render in lower case.
+  $word = strtolower($word);
+
+  // Look up the word in the dictionary.
+  $db = new PDO("sqlite:{$root}/db/dictionary.sq3");
+  $query = 'select definition from entries where word = ?';
+  $statement = $db->prepare($query);
+  $statement->execute(array($word));
+  $definitions = $statement->fetchAll(PDO::FETCH_COLUMN, 'definition');
+  // If there is no such word, exit with an appropriate message.
+  if (count($definitions) != 1) {
+    include "{$root}/missing.html";
+  }
+  $definition = $definitions[0];
+
+  // Construct the canonical URL for this word. At this writing, the
+  //  token $parts[1] resolves to "entry". This may change eventually.
+  //  If the virtual directory structure changes, the template will
+  //  have to be modified here and elsewhere.
+  $canonical_request = "/{$parts[1]}/{$word}/";
+  // Redirect to the canonical URL if necessary.
+  if ($original_request != $canonical_request) {
+    http_response_code(301);
+    header("Location: $canonical_request");
+    exit(0);
+  }
+
+  $titleExtension = " : {$word}";
   include "{$root}/header.html";
-  include "content.html";
+?>
+
+<h2> <?= $word ?>: </h2>
+
+<?php
+  include "{$root}/definition.html";
+
   include "{$root}/footer.html";
 ?>

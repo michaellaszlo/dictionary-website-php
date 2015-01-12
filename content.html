@@ -3,20 +3,20 @@
 
 <?php
 
-// Get a random word from the database.
+  // Get a random word from the database.
 
-$query = 'select word from entries order by random() limit 1';
-$statement = $db->prepare($query);
-$statement->execute();
-$word = $statement->fetch(PDO::FETCH_ASSOC)['word'];
+  $query = 'select word from entries order by random() limit 1';
+  $statement = $db->prepare($query);
+  $statement->execute();
+  $word = $statement->fetch(PDO::FETCH_ASSOC)['word'];
 
-// Look up the definition of that word.
+  // Look up the definition of that word.
 
-$query = 'select definition from entries where word = ?';
-$statement = $db->prepare($query);
-$statement->execute(array($word));
-$definition = $statement->fetch(PDO::FETCH_ASSOC)['definition'];
-include "{$root}/definition.html";
+  $query = 'select definition from entries where word = ?';
+  $statement = $db->prepare($query);
+  $statement->execute(array($word));
+  $definition = $statement->fetch(PDO::FETCH_ASSOC)['definition'];
+  include "{$root}/definition.html";
 ?>
 
 

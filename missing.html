@@ -1,0 +1,43 @@
+<?php
+
+  http_response_code(404);
+
+  $root = $_SERVER['DOCUMENT_ROOT'];
+  $titleExtension = " : page not found";
+  include "{$root}/header.html";
+
+?>
+<html>
+<body>
+<h1> The devil you say. Page not found! </h1>
+
+<?php
+
+  if (isset($original_request)) {
+?>
+
+<p> You requested: </p>
+
+<pre> <?= $original_request ?> </pre>
+
+<p> There is no such page. </p>
+
+<p> Perhaps you'd like to visit our <a href="/">home page</a>? </p>
+
+<?php
+  }
+
+  if (isset($exit_message)) {
+?>
+
+<p> <?= $exit_message ?> </p>
+
+<?php
+  }
+?>
+
+<?php
+  include "{$root}/footer.html";
+
+  exit(0);
+?>

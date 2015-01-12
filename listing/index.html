@@ -1,6 +1,103 @@
 <?php
   $root = $_SERVER['DOCUMENT_ROOT'];
+
+  $request = $_SERVER['REQUEST_URI'];
+  $original_request = $request;
+  // If there is no trailing slash, add one.
+  if (substr($request, -1) != '/') {
+    $request .= '/';
+  }
+  // Replace repeated slashes with single slashes.
+  $request = preg_replace('/\/+/', '/', $request);
+  // Count the slashes.
+  $num_slashes = substr_count($request, '/');
+
+  function get_words($query, $parameters) {
+    global $root;
+    $db = new PDO("sqlite:{$root}/db/dictionary.sq3");
+    $statement = $db->prepare($query);
+    $statement->execute($parameters);
+    $words = $statement->fetchall(PDO::FETCH_COLUMN, 'word');
+    return $words;
+  }
+
+  // There are two slashes if the full listing is requested: /listing/
+  if ($num_slashes == 2)  {
+    $canonical_request = '/listing/';
+    $words = get_words('select word from entries order by word', []);
+    $num_words = count($words);
+    $title = count($words)." words in all";
+    $titleExtension = " : index of all words";
+  }
+
+  // Otherwise, there should be exactly three slashes.
+  else if ($num_slashes != 3) {
+    include "{$root}/missing.html";
+  }
+
+  else {
+    // Extract the requested initial.
+    $parts = explode('/', $request);
+    // The request '/entry/abacus/' yields ['', 'entry', 'abacus', ''].
+    $initial = $parts[2];
+    // Apply URL decoding and UTF-8 decoding.
+    $initial = utf8_decode(urldecode($initial));
+    // Render in lower case.
+    $initial = strtolower($initial);
+
+    // Construct the canonical URL for this page. At this writing, the
+    //  token $parts[1] resolves to "listing". This may change eventually.
+    //  If the virtual directory structure changes, the template will
+    //  have to be modified here and elsewhere.
+    $canonical_request = "/{$parts[1]}/{$initial}/";
+
+    // We should have a single character.
+    if (iconv_strlen($initial) != 1) {
+      include "{$root}/missing.html";
+    }
+
+    // Look up the set of words starting with our initial.
+    $query = 'select word from entries where word like ? order by word';
+    $words = get_words($query, [$initial.'%']);
+    $num_words = count($words);
+
+    // If the set is empty, exit with an appropriate message.
+    if ($num_words == 0) {
+      include "{$root}/missing.html";
+    }
+
+    $plural = $num_words == 1 ? '' : 's';
+    $title = $num_words." word{$plural} starting with ".strtoupper($initial);
+    $titleExtension = " : index of words starting with ".strtoupper($initial);
+  }
+
+  // Redirect to the canonical URL if necessary.
+  if ($original_request != $canonical_request) {
+    http_response_code(301);
+    header("Location: $canonical_request");
+    exit(0);
+  }
+
   include "{$root}/header.html";
-  include "content.html";
+?>
+
+<h2> <?= $title ?>: </h2>
+
+<ul class="listing">
+<?php
+  foreach ($words as $word) {
+    $path = '/entry/'.urlencode($word).'/';
+    // Replace hyphens with non-breaking hyphens.
+    $word = str_replace('-', '&#8209;', $word);
+    // Replace spaces with non-breaking spaces.
+    $word = str_replace(' ', '&nbsp;', $word);
+    $link = "<a href=\"{$path}\">{$word}</a>";
+?>
+  <li><?= $link ?></li><wbr />
+<?php
+  }
+?>
+</ul>
+<?php
   include "{$root}/footer.html";
 ?>

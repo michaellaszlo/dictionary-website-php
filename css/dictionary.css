@@ -23,15 +23,33 @@ p a:hover {
   color: #5a2929;
   background: #eee;
 }
-h1 a {
-  color: #444;
-}
-h1 a:hover {
-  color: #000;
-}
 
 #wrapper {
   margin: 20px 40px;
+}
+
+a.title {
+  color: #444;
+  position: relative;
+}
+a.title:hover {
+  color: #000;
+}
+.homeLinkIcon {
+  display: inline-block;
+  margin-left: 12px;
+  width: 25px;
+  height: 25px;
+  background-position: 0;
+}
+.home .homeLinkIcon {
+  background: url(/i/reload.png);
+}
+.notHome .homeLinkIcon {
+  background: url(/i/home.png);
+}
+a.title:hover .homeLinkIcon {
+  background-position: -25px;
 }
 
 .listing {
@@ -58,14 +76,26 @@ h1 a:hover {
 .listing.large a {
   color: #609dd5;
   font-weight: normal;
-  padding: 0 15px 5px;
+  padding: 0 12px;
 }
 .listing.large li.long a {
   font-size: 40px;
   padding: 0 13px 3px;
 }
 .listing a:hover {
+  background: #326798;
+  color: #fff;
+}
+.listing a.currentListing {
   background: #609dd5;
+  color: #fff;
+}
+.listing a.relatedListing {
+  background: #a0c2e1;
+  color: #fff;
+}
+.listing a.relatedListing:hover {
+  background: #326798;
   color: #fff;
 }
 
