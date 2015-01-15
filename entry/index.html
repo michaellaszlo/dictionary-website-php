@@ -30,6 +30,7 @@
   $definitions = $statement->fetchAll(PDO::FETCH_COLUMN, 'definition');
   // If there is no such word, exit with an appropriate message.
   if (count($definitions) != 1) {
+    unset($word);
     include "{$root}/missing.html";
   }
   $definition = $definitions[0];
