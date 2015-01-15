@@ -43,7 +43,7 @@ a.title:hover {
   background-position: 0;
 }
 .home .homeLinkIcon {
-  background: url(/i/reload.png);
+  background: none;
 }
 .notHome .homeLinkIcon {
   background: url(/i/home.png);
