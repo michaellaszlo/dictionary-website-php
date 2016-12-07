@@ -24,7 +24,7 @@
   // There are two slashes if the full listing is requested: /listing/
   if ($num_slashes == 2)  {
     $canonical_request = '/listing/';
-    $words = get_words('select word from entries order by word', []);
+    $words = get_words('select word from entries order by word', array());
     $num_words = count($words);
     $title = count($words)." words in all";
     $titleExtension = " : index of all words";
@@ -58,7 +58,7 @@
 
     // Look up the set of words starting with our initial.
     $query = 'select word from entries where word like ? order by word';
-    $words = get_words($query, [$initial.'%']);
+    $words = get_words($query, array($initial.'%'));
     $num_words = count($words);
 
     // If the set is empty, exit with an appropriate message.

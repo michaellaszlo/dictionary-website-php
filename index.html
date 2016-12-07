@@ -36,14 +36,16 @@
   $query = 'select word from entries order by random() limit 1';
   $statement = $db->prepare($query);
   $statement->execute();
-  $word = $statement->fetch(PDO::FETCH_ASSOC)['word'];
+  $result = $statement->fetch(PDO::FETCH_ASSOC);
+  $word = $result['word'];
 
   // Look up the definition of that word.
 
   $query = 'select definition from entries where word = ?';
   $statement = $db->prepare($query);
   $statement->execute(array($word));
-  $definition = $statement->fetch(PDO::FETCH_ASSOC)['definition'];
+  $result = $statement->fetch(PDO::FETCH_ASSOC);
+  $definition = $result['definition'];
   include "{$root}/definition.html";
 ?>
 
